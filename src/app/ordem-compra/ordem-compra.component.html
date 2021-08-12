@@ -1,0 +1,129 @@
+<div class="container">
+  <div class="ordem-compra" *ngIf="idOrdemCompra === undefined">
+    <form [formGroup]="formOrdem" novalidate (ngSubmit)="confirmarCompra()">
+
+      <h5>Sua Compra</h5>
+      <hr />
+      <div *ngIf="itensCarrinho.length != 0; else carrinhoVazio">
+
+
+
+
+      <div *ngFor="let item of itensCarrinho" class="row"
+       style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
+        <div class="col-sm-1">
+          <img [src]="item.img['url']" class="img-fluid">
+        </div>
+        <div class="col-sm-6">
+          {{item.titulo}}
+          <br />
+          {{item.descricao_oferta}}
+        </div>
+        <div class="col-sm-4">
+          <button style="margin-bottom: 7px;" (click)="diminuirQuantidadeCarrinho(item.id)" type="button" class="btn btn-link">
+            <svg  color="black" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 1000 1000"><path d="M1000 501q0 136-67 251T751 934t-251 67t-251-67T67 752T0 501t67-251T249 68T500 1t251 67t182 182t67 251zm-794 58h589V441H206v118z" fill="currentColor"/></svg>
+          </button>
+          <input  disabled style="width: 60px; text-align: center; border: none;" type="text" value="{{item.quantidade}}">
+          <button style="margin-bottom: 7px;" (click)="aumentarQuantidadeCarrinho(item.id)" type="button" class="btn btn-link">
+            <svg  color="black" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11s11-4.925 11-11S18.075 1 12 1zm1 15a1 1 0 1 1-2 0v-3H8a1 1 0 1 1 0-2h3V8a1 1 0 1 1 2 0v3h3a1 1 0 1 1 0 2h-3v3z" fill="currentColor"/></g></svg>
+        </button>
+        </div>
+        <div class="form-group col d-flex justify-content-end">
+          <h6 style="margin-top: 10px;">{{item.quantidade * item.valor | currency: 'BRL':true}}</h6>
+        </div>
+
+
+
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col d-flex justify-content-end">
+          <h4>Total do pedido: {{valorCarrinho | currency: 'BRL':true}}</h4>
+        </div>
+      </div>
+      <br />
+    </div>
+
+    <ng-template #carrinhoVazio>
+      <div class="form-row d-flex justify-content-center" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
+          Seu Carrinho está vazio :( não perca tempo e
+          aproveite as oferta clicando⠀<a routerLink="/">aqui</a>
+      </div>
+    </ng-template>
+
+
+
+      <h5 style="padding-top: 20px;">Dados de entrega</h5>
+      <hr />
+
+      <div class="row">
+
+        <div class="col-md-6">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Endereço"
+            autocomplete="off"
+            formControlName="endereco"
+          >
+          <small class="form-text text-success" *ngIf="formOrdem.get('endereco').valid && formOrdem.get('endereco').touched">Ok</small>
+          <small class="form-text text-danger" *ngIf="!formOrdem.get('endereco').valid && formOrdem.get('endereco').touched">Endereco invalido</small>
+
+        </div>
+
+        <div class="col-md-2">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Número"
+            autocomplete="off"
+            formControlName="numero"
+          >
+          <small class="form-text text-success" *ngIf="formOrdem.get('numero').valid && formOrdem.get('numero').touched">Ok</small>
+          <small class="form-text text-danger" *ngIf="!formOrdem.get('numero').valid && formOrdem.get('numero').touched">Numero invalido</small>
+        </div>
+
+        <div class="col-md-4">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Complemento"
+            autocomplete="off"
+            formControlName="complemento"
+          >
+        </div>
+
+      </div>
+      <br />
+
+      <h5>Dados de pagamento</h5>
+      <hr />
+
+      <div class="form-row">
+
+        <div class="form-group col-md-3">
+          <select
+            class="form-control"
+            formControlName="formaPagamento"
+          >
+            <option value="">Selecione uma opção</option>
+            <option value="dinheiro">Dinheiro</option>
+            <option value="debito">Débito</option>
+          </select>
+          <small class="form-text text-success" *ngIf="formOrdem.get('formaPagamento').valid && formOrdem.get('formaPagamento').touched">Ok</small>
+          <small class="form-text text-danger" *ngIf="!formOrdem.get('formaPagamento').valid && formOrdem.get('formaPagamento').touched">Escolha a forma de pagamento</small>
+
+        </div>
+      </div>
+
+      <hr />
+      <button
+        type="submit"
+        class="btn btn-primary btn-lg"
+      >Cofirmar compra</button>
+    </form>
+  </div>
+  <div class="ordem-compra" *ngIf="idOrdemCompra !== undefined">
+    <app-ordem-compra-sucesso [idPedidoCompra]="idOrdemCompra"></app-ordem-compra-sucesso>
+  </div>
+</div>
